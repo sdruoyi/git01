@@ -16,3 +16,23 @@ git reset --hard HEAD~2 回退两个版本 （~'2'要回退几个版本就是几
 git reset --hard 12bb04c9 去到指定的版本返回最后提交时版本（后面的12bb04c9是log中的唯一标识遗传黄色代码不用全部只需要到和之前版本不一样的位置即可）
 ¤拷贝和粘贴不能通过ctrl+c/v 【必须使用 拷贝ctrl+insert  粘贴shift+insert】或者鼠标右键选择copy、paste
 git reflog 查看所有已提交的版本的唯一标识
+git 命令出现end问题时使用:q可以退出
+直接删除工作区文件后。git rm +完整文件名 删除本地仓库文件，方法二、直接删除工作区文件后，在Git命令窗口中重新操作git add+文件名 和git commit -m '描述' 删除Git仓库中的文件。
+git checkout +完整文件名 在工作区不小心删除了文件，从本地仓库取回文件。方法二、git restore +完整文件名 恢复删除的文件。
+克隆github上的开源项目，进入项目后点击Code选择Download ZIP 下载到本地仓库 方法二、选择Clone中HTTPS里的url网址后的复制图标复制后再Git命令窗口输入 git clone +前面复制的完整url网址
+
+在gitHub中新建仓库。在网页的右上角点击加号，选择New repository，填写Repository name仓库名称（填入后会自动验证打勾了就行），填写Description描述，选择Public/Private公共的还是私有的。可选Add a README file项目说明、Add .gitignore、Choose a license选择许可证（例如只能下载学习、可以用作商业、可以修改等）
+删除GitHub中的仓库，到项目中选择上方的Settings，进入页面后拉到底选择Delete this repository删除仓库。在跳出的对话框中输入对话框上方Please type sdruoyi/git-test to confirm.中type后面的用户名/仓库名。之后选择下方I understand the consequences,delete this repository按钮来提交。
+
+git branch -m +名字 重命名分支
+git branch -M +名字（例如：master） 如果名字已经存在，强制重命名分支
+
+git remote add origin +远程仓库地址(例如：https://github.com/sdruoyi/git-test.git) 把本地仓库和远程仓库进行绑定，注意1、远程仓库中需要选择HTTPS不能选SSH   2、如果提示fatal：remote origin already exists.已经绑定过的话，可以更改origin（例如origin1）之后push推送时origin必须一致。
+git push -u origin master（与本地仓库的分支相同） 把本地仓库内容推送到远程仓库会有登入github操作可以选择浏览器登入后关闭自动提示例如：remote: Resolving deltas: 100% (15/15), done.有done字样就是推送好了。
+
+ssh-keygen -t rsa -C “GitHub账户邮箱”使用本地git客户端生成SSH公钥与私钥的执行命令 输入后等自动提示停止就回车，大约要按5次回车成功后会有一个小方块包裹的字符乱码。之后到Enter file in which to save the key (/c/Users/45012/.ssh/id_rsa):提示的用户路径.ssh文件夹中会生成一个id_rsa(私钥) 一个id_rsa.pub(公钥) 可以用记事本打开公钥复制里面的全部代码，到GitHub点击右上角的头像后选择Settings设置，选择SSH and GPG keys，在点击SSH keys一排右边的New SSH key新建一个sshkey，填写title（没有要求随便起），key中把复制的公钥黏贴进去。点击Add SSH key提交。显示公钥信息就是提交成功了
+ssh -T git@github.com 检查测试公钥私钥的链接，看到提示Are you sure you want to continue connecting (yes/no/[fingerprint])?输入yes后看到提示Hi sdruoyi! You've successfully authenticated, but GitHub does not provide shell access.成功授权就好了
+使用SSH拉取项目先找到需要的项目。点击绿色的Code选择SSH点击地址边上的复制按钮输入git clone +地址（例如：git@github.com:vuejs/vue.git）
+git remote add origin +远程仓库地址(git@github.com:sdruoyi/git-test.git) 绑定SSH地址的远程仓库
+如果提示error: remote origin already exists. 可以先 git remote rm origin 删除远程 Git 仓库之后重新绑定。
+git push -u origin master（与本地仓库的分支相同） 推送本地仓库内容到远程仓库
