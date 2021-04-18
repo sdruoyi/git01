@@ -24,11 +24,9 @@ git checkout +完整文件名 在工作区不小心删除了文件，从本地�
 在gitHub中新建仓库。在网页的右上角点击加号，选择New repository，填写Repository name仓库名称（填入后会自动验证打勾了就行），填写Description描述，选择Public/Private公共的还是私有的。可选Add a README file项目说明、Add .gitignore、Choose a license选择许可证（例如只能下载学习、可以用作商业、可以修改等）
 删除GitHub中的仓库，到项目中选择上方的Settings，进入页面后拉到底选择Delete this repository删除仓库。在跳出的对话框中输入对话框上方Please type sdruoyi/git-test to confirm.中type后面的用户名/仓库名。之后选择下方I understand the consequences,delete this repository按钮来提交。
 
-git branch -m +名字 重命名分支
-git branch -M +名字（例如：master） 如果名字已经存在，强制重命名分支
-
 git remote add origin +远程仓库地址(例如：https://github.com/sdruoyi/git-test.git) 把本地仓库和远程仓库进行绑定，注意1、远程仓库中需要选择HTTPS不能选SSH   2、如果提示fatal：remote origin already exists.已经绑定过的话，可以更改origin（例如origin1）之后push推送时origin必须一致。
 git push -u origin master（与本地仓库的分支相同） 把本地仓库内容推送到远程仓库会有登入github操作可以选择浏览器登入后关闭自动提示例如：remote: Resolving deltas: 100% (15/15), done.有done字样就是推送好了。
+git remote remove origin（创建的远程仓库名） 移除绑定的远程仓库
 
 ssh-keygen -t rsa -C “GitHub账户邮箱”使用本地git客户端生成SSH公钥与私钥的执行命令 输入后等自动提示停止就回车，大约要按5次回车成功后会有一个小方块包裹的字符乱码。之后到Enter file in which to save the key (/c/Users/45012/.ssh/id_rsa):提示的用户路径.ssh文件夹中会生成一个id_rsa(私钥) 一个id_rsa.pub(公钥) 可以用记事本打开公钥复制里面的全部代码，到GitHub点击右上角的头像后选择Settings设置，选择SSH and GPG keys，在点击SSH keys一排右边的New SSH key新建一个sshkey，填写title（没有要求随便起），key中把复制的公钥黏贴进去。点击Add SSH key提交。显示公钥信息就是提交成功了
 ssh -T git@github.com 检查测试公钥私钥的链接，看到提示Are you sure you want to continue connecting (yes/no/[fingerprint])?输入yes后看到提示Hi sdruoyi! You've successfully authenticated, but GitHub does not provide shell access.成功授权就好了
@@ -36,3 +34,28 @@ ssh -T git@github.com 检查测试公钥私钥的链接，看到提示Are you su
 git remote add origin +远程仓库地址(git@github.com:sdruoyi/git-test.git) 绑定SSH地址的远程仓库
 如果提示error: remote origin already exists. 可以先 git remote rm origin 删除远程 Git 仓库之后重新绑定。
 git push -u origin master（与本地仓库的分支相同） 推送本地仓库内容到远程仓库
+
+git checkout +要切换的分支/主干名 切换到本地指定分支
+git checkout -b +新分支的名字 本地新建分支并切换到新建分支
+git branch -d +要删除的分支名 删除本地指定分支
+git branch 查看所有分支，带*号标记就是当前本地所在分支
+git merge +要合并的分支名字 合并本地分支（注意必须先切换到主干master，再进行合并）注意合并如遇到CONFLICT(content):Merge conflict in +文件名 Automatic merge failed；fix conflicts and then commit the result提示 本地分支合并冲突，自动合并失败需要修复冲突然后再提交结果。打开该文件找到<<<<<< HEAD 处是指当前分支冲突的内容，=====是分隔符，>>>>>> 分支名称 是该分支的冲突内容。冲突需要手动更改。删除提示增加的信息后。按照项目要求增加减少合并等修改内容，修改后重新add提交，commit保存(该操作时分支中会多出|MERGING字样，重新保存到本地仓库后该字样会消失)此次修改不会影响到分支中的内容。
+git log --graph --pretty=oneline 修改冲突，执行提交后。执行该命令可查看分支合并图。
+git branch -m | -M +旧分支名 +新分支名 重命名本地分支，如果newbranch名字分支已经存在，则需要使用-M强制重命名，否则，使用-m进行重命名。
+
+git branch -a 查看本地与远程分支 （远程仓库分支显示例： remotes/origin/master）
+git push origin +要推送的分支名 推送本地分支到远程仓库并且如果没有会在远程仓库中创建该分支，查看分支在远程仓库中找到主干master点击后再Branches列中显示分支信息
+git push origin :+要删除的远程分支名 删除远程分支（本地分支还保留）注意冒号或者 git push origin --delete <远程分支名称>
+git checkout -b +本地分支名 origin/+远程分支名 拉取远程指定分支并在本地创建分支
+
+在远程仓库中直接创建分支，点击项目中的分支名下拉菜单在提示Filter branches/tags 框中直接输入新分支名字 点击下面的Create branch：输入的分支名的提示后自动创建，创建好后必须到Git命令框输入git fetch 同步远程仓库的状态，最后执行git checkout -b +本地分支名 origin/+远程分支名 拉取远程分支并在本地创建
+
+git pull 拉取远程仓库的最新状态并直接合并相当于git fetch + git merge；如果拉取后提示CONFLICT (content):Merge conflict in 文件名 Automatic merge failed；fix conflicts and then commit the result是提示远程多人协同操作冲突。修改和本地分支合并冲突一直，把提示字符删除后，按照实际需求更改代码。再执行 add、commit 添加到本地仓库，再push到远程仓库。
+
+git tag +标签名 新建标签(默认为HEAD)
+git tag-a +标签名 -m '描述'  添加标签同时指定标签描述信息
+git tag 查看所有标签
+git tag -d +标签名 删除本地标签
+git push origin +标签名 推送本地标签到远程，可以到GitHub中项目右侧Release下面的数字tags点击查看 在添加标签时如没有输入-m 后描述的情况下，标签的描述就以最后一次提交代码的信息为准。
+git push origin --tags 推送全部未推送过的本地标签到远程，在tag后面的压缩包是最后一次本地仓库推送的内容。
+git push origin :refs/tags/+标签名 删除一个远程标签(本地标签还在)
